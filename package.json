@@ -1,6 +1,6 @@
 {
   "name": "madnet",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
@@ -19,6 +19,7 @@
     "@types/react-router": "^5.1.4",
     "@types/react-router-dom": "^5.1.3",
     "autolinker": "^3.14.1",
+    "feeder-react-feedback": "0.0.6",
     "firebase": "^7.14.3",
     "ionicons": "^5.0.0",
     "loadash": "^1.0.0",
@@ -39,6 +40,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --browser",
+    "lint": "eslint --config .eslintrc.js src/",
+    "lint:deps": "depcruise --config .dependency-cruiser.js src",
+    "prettier:check": "git diff --name-only HEAD master | xargs prettier --check",
+    "prettier:fix": "git diff --name-only HEAD master | xargs prettier --write",
+    "debug": "NODE_ENV=debug jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -59,10 +65,19 @@
   "devDependencies": {
     "@capacitor/cli": "1.5.1",
     "@ionic/react-test-utils": "0.0.3",
+    "dependency-cruiser": "^9.21.4",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-protractor": "^2.1.1",
     "eslint-plugin-react": "^7.19.0",
     "firebase-mock": "^2.3.2",
-    "protractor-react-selector": "^2.2.2"
+    "prettier": "^2.2.1",
+    "protractor-react-selector": "^2.2.2",
+    "puppeteer": "^5.3.1",
+    "query-selector-shadow-dom": "^0.7.1",
+    "react-test-renderer": "^16.13.1"
   },
-  "description": "Make A Differenc(MAD) Internal App"
+  "description": "Make A Difference(MAD) Internal App"
 }

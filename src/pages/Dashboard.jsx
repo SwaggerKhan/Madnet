@@ -1,4 +1,4 @@
-import { IonPage,IonContent,IonGrid,IonRow,IonCol,IonIcon,IonText, IonItem, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/react';
+import { IonPage,IonContent,IonGrid,IonRow,IonCol,IonIcon,IonText, IonCard, IonCardHeader, IonCardTitle, IonCardContent,IonItem } from '@ionic/react';
 import React, { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom'
 
@@ -22,12 +22,12 @@ const Dashboard = () => {
                         <IonCol size-md="6" size-xs="12">
                             <IonCard className="light">
                                 <IonCardHeader>
-                                    <IonCardTitle>Hello, {user.name}</IonCardTitle>
+                                    <IonCardTitle id="greeting-title">Hello, {user.name}</IonCardTitle>
                                 </IonCardHeader>
                                 <IonCardContent>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol size="3">
+                                            <IonCol size-md="3" size-xs="4">
                                                 <IonText className="centerAlign">
                                                     <p>Credits</p>
                                                 </IonText>
@@ -76,8 +76,9 @@ const AppGrid = ({ apps }) => {
             <IonRow className="ion-justify-content-start">
                 {apps.map((app, index) => {
                     if(app.title === "Dashboard") return null
+
                     return (
-                        <IonCol className="menu-item" key={index} size-xs="4" size-md="4">                            
+                        <IonCol className="menu-item" key={index} size-xs="6" size-md="4">                            
                             <Link to={app.url}>
                                 <div className="box">
                                     <IonIcon slot="start" icon={app.iosIcon} /><br />
@@ -91,5 +92,6 @@ const AppGrid = ({ apps }) => {
         </IonGrid>
     )
 }
+
 
 export default Dashboard;

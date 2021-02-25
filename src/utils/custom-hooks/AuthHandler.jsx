@@ -5,7 +5,7 @@ import api from "../API";
 import { getStoredUser, setStoredUser } from "../Helpers"
 
 const useAuthHandler = (initialState) => {
-    const [user, setUser] = React.useState(initialState)
+    const [user, setUser] = React.useState(initialState)    
 
     const setCurrentUser = (user_data) => {
         setStoredUser(user_data)
@@ -15,7 +15,11 @@ const useAuthHandler = (initialState) => {
     const unsetCurrentUser = () => {
         const user_data = getStoredUser()
         window.localStorage.clear()
-        api.rest(`users/${user_data.id}/devices/${user_data.token}`, "delete") // Some wierd issue happening when calling unsetDeviceToken
+        try {
+            api.rest(`users/${user_data.id}/devices/${user_data.token}`, "delete") // Some wierd issue happening when calling unsetDeviceToken
+        } catch(e) {
+            console.log(e)
+        }
         
         setUser(DEFAULT_USER_AUTH)
     };
@@ -33,6 +37,38 @@ const useAuthHandler = (initialState) => {
         return false
     }
 
+    const accessLevel = () => {
+        if(!user.id) return false;
+
+        let isDirector, isFellow, isStrat = false;
+
+        for(let i in user.groups){
+            let grp = user.groups[i];
+            if(grp.type === 'national' || grp.type === 'executive'){
+                isDirector = true;
+            }
+            else if(grp.type === 'strat'){
+                isStrat = true;
+            }
+            else if(grp.type === 'fellow'){
+                isFellow = true;
+            }
+        }
+
+        if(isDirector) {
+            return 'director';
+        }
+        else if(isStrat) {
+            return 'strat';
+        }
+        else if(isFellow) {
+            return 'fellow';
+        }
+        else {
+            return false;
+        }
+    }
+
     const hasPermission = (permission, redirect) => {
         if (!user.id || user.permissions === undefined) return false;
         const valid = user.permissions.includes(permission)
@@ -45,6 +81,7 @@ const useAuthHandler = (initialState) => {
         setCurrentUser,
         unsetCurrentUser,
         isFellow,
+        accessLevel,
         hasPermission
     };
 };

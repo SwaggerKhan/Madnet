@@ -1,0 +1,20 @@
+{
+  "trailingComma": "none",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ".prettierrc",
+      "options": {
+        "parser": "json"
+      }
+    },
+    {
+      "files": ".github/workflows/node.js.yml",
+      "options": {
+        "parser": "yaml"
+      }
+    }
+  ]
+}

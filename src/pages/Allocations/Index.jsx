@@ -9,7 +9,8 @@ import Title from "../../components/Title"
 
 const TeacherIndex= () => {
     const { user } = React.useContext(authContext)
-    const { shelter_id, project_id } = useParams()
+    const { shelter_id, project_id, new_level_id } = useParams()
+    const [ level_id ] = React.useState(new_level_id ? new_level_id : 0)
     const { showMessage } = React.useContext(appContext)
     const { callApi } = React.useContext(dataContext)
     const [teachers, setTeachers] = React.useState([])
@@ -22,28 +23,27 @@ const TeacherIndex= () => {
             // const user_data = await callApi({url:"cities/" + cityId + "/teachers"})  // 2 (Diff values. Why?)
             const city_name = await callApi({url: "cities/" + cityId });
                
-            if(user_data)
-                { 
+            if(user_data) { 
                 setTeachers(user_data)
                 setLocation(city_name.name)
-                }
-            else 
+            }
+            else {
                 showMessage("No teachers in city")
+            }
         }
-    fetchTeacherList()}
-    ,[ cityId])
+        fetchTeacherList()
+    }, [ cityId ])
 
 
     return (
         <IonPage>
-            <Title name={`Teachers in ${location}`} />
-                <IonContent>
+            <Title name={`Teachers in ${location}`} back={ `/shelters/${shelter_id}/projects/${project_id}/view-teachers` } />
+            <IonContent className="dark">
                 <IonList>
                     {(teachers.map((teacher, index) => {
                         return (
-                            <IonItem key={index} routerLink={ `/shelters/${shelter_id}/projects/${project_id}/assign-teachers/${teacher.id}` } routerDirection="none" >
-                                <IonLabel><h4>{teacher.name}</h4> 
-                                </IonLabel>
+                            <IonItem key={index} routerLink={ `/shelters/${shelter_id}/projects/${project_id}/assign-teachers/${teacher.id}/level/${level_id}` }>
+                                <IonLabel>{teacher.name}</IonLabel>
                             </IonItem>
                         );
                     }))
