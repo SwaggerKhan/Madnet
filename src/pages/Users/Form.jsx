@@ -34,8 +34,9 @@ import './Form.css'
 
 const UserForm = () => {
   const { user_id, action } = useParams()
-  const [user, setUser] = React.useState({ name: '', groups: [], main_group: { id: 0, name: 'None Selected' } }) // :TODO: We can do away with the main_group extra array.
+  const [user, setUser] = React.useState({ name: '', groups: [], main_group: { id: 0, name: 'None Selected' } , center_id: 154 }) // :TODO: We can do away with the main_group extra array.
   const [groups, setGroups] = React.useState([])
+  const [shelter, setShelter] = React.useState([])
   const [disable, setDisable] = React.useState(action === 'edit' ? false : true)
   const { callApi, deleteUser, updateUser } = React.useContext(dataContext)
   const { hasPermission } = React.useContext(authContext)
@@ -57,6 +58,11 @@ const UserForm = () => {
   const updateMainGroup = (e) => {
     const main_group = user.groups.find( ele => ele.id == e.target.value)
     setUser({ ...user, main_group: main_group })
+  }
+
+  const updateShelter = (e) => {
+    const shelter = user.find( ele => ele.id == e.target.value)
+    setUser({ ...user, center_id: shelter.id })
   }
 
   const openEdit = () => {
@@ -123,6 +129,8 @@ const UserForm = () => {
           user_details.main_group = main_group
         }
         setUser(user_details)
+        const shelter_name = await callApi({ url : `/centers/${user_details.center_id}`})
+        setShelter(shelter_name)
       }
     }
     fetchUser()
@@ -344,7 +352,7 @@ const UserForm = () => {
                               <IonInput
                                 type="text"
                                 placeholder="Primary Role"
-                                value={ user.main_group.name }
+                                //value={ user.main_group.name }
                                 disabled={disable}
                               />
                             </IonItem>
@@ -369,13 +377,46 @@ const UserForm = () => {
                                         name="main_group"
                                         value={grp.id}
                                       />
-                                      <IonLabel> &nbsp; {grp.name}</IonLabel>
+                                      //<IonLabel> &nbsp; {grp.name}</IonLabel> 
                                     </IonItem>
                                   )
                                 })}
                             </IonRadioGroup>
-                          )}
+                          )}  
+                          {disable ? (
+                             <IonItem>
+                              <IonLabel position="stacked">Community</IonLabel>
+                              <IonInput
+                                type="text"
+                                placeholder="Shelter Name"
+                                value={ shelter.name }
+                                disabled={disable}
+                              />
+                            </IonItem> 
+                          ) : (
+                            <IonRadioGroup
+                              name="shelter_name"
+                              value={shelter.id}
+                              onIonChange={updateShelter}
+                            >
+                              <IonListHeader>
+                                <IonLabel>Community: </IonLabel>
+                              </IonListHeader>
 
+                      
+                                    <IonItem
+                                      lines="none"
+                                      className="group-selectors"
+                                    >
+                                      <IonRadio
+                                        name="shelter_name"
+                                        value={shelter.id}
+                                      />
+                                      //<IonLabel> &nbsp; {shelter.name}</IonLabel> 
+                                    </IonItem>
+                                  )
+                            </IonRadioGroup>
+                          )}
                           {!disable ? (
                             <IonItem>
                               <IonButton type="submit" size="default">
