@@ -61,10 +61,10 @@ const UserForm = () => {
     setUser({ ...user, main_group: main_group })
   }
 
-  // const updateShelter = (e) => {
-  //   const shelter = user.find( ele => ele.id == e.target.value)
-  //   setUser({ ...user, center_id: shelter.id })
-  // }
+  const updateShelter = (e) => {
+    const shelter = user.find( ele => ele.id == e.target.value)
+    setUser({ ...user, center_id: shelter.id })
+  }
 
   const openEdit = () => {
     setDisable(false)
@@ -130,7 +130,7 @@ const UserForm = () => {
           user_details.main_group = main_group
         }
         setUser(user_details)
-        const center = await callApi({ url : `/centers/${user_details.center_id}`})
+        const center = await callApi({ url : `/centers/${user.center_id}`})
         setShelter(center)
       }
     }
@@ -358,7 +358,7 @@ const UserForm = () => {
                               <IonInput type="text" placeholder="Shelter Name" value={ shelter.name } disabled={disable} />
                             </IonItem> 
                           ) : (
-                            <IonRadioGroup name="center_id" value={shelter.id} onIonChange={updateField} >
+                            <IonRadioGroup name="center_id" value={shelter.id} onIonChange={updateShelter} >
                               <IonListHeader>
                                 <IonLabel>Community</IonLabel>
                               </IonListHeader>
