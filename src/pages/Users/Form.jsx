@@ -37,6 +37,7 @@ const UserForm = () => {
   const [user, setUser] = React.useState({ name: '', groups: [], main_group: { id: 0, name: 'None Selected' } , center_id: 154 }) // :TODO: We can do away with the main_group extra array.
   const [groups, setGroups] = React.useState([])
   const [shelters, setShelters] = React.useState([])
+  const [shelter, setShelter] = React.useState([])
   const [disable, setDisable] = React.useState(action === 'edit' ? false : true)
   const { callApi, deleteUser, updateUser } = React.useContext(dataContext)
   const { hasPermission } = React.useContext(authContext)
@@ -60,9 +61,9 @@ const UserForm = () => {
     setUser({ ...user, main_group: main_group })
   }
 
-  const updateShelter = (e) => {
-    setUser({ ...user, center_id: e.target.value })
-  }
+  // const updateShelter = (e) => {
+  //   setUser({ ...user, center_id: e.target.value })
+  // }
 
   const openEdit = () => {
     setDisable(false)
@@ -128,12 +129,9 @@ const UserForm = () => {
           user_details.main_group = main_group
         }
         setUser(user_details)
-        // const center = await callApi({ url : `/centers/${user.center_id}`})
-        // setShelter(center)
         callApi({url:`/cities/${user_details.city_id}/centers`}).then((data =>{
           setShelters(data)
         }))
-        
       }
     }
     fetchUser()
@@ -147,6 +145,9 @@ const UserForm = () => {
 
   }, [user_id])
 
+  
+
+  
   const saveUser = async (e) => {
     e.preventDefault()
     const updateElements = {
@@ -177,6 +178,15 @@ const UserForm = () => {
       //TODO: give success message
     }
   }
+
+  React.useEffect(() => {
+    shelters.forEach(shelt => {
+        if(shelt.id == user.center_id) {
+            setShelter(shelt)
+            return
+        }
+    });
+}, [user.center_id])
 
   return (
     <IonPage>
@@ -348,12 +358,11 @@ const UserForm = () => {
 
                           {disable ? ( 
                              <IonItem>
-                              <IonLabel position="stacked">Community</IonLabel>
-                              {(shelters.id == user.center_id)? 
-                              <IonInput type="text" placeholder="Shelter Name" value={ shelters.name } disabled={disable} /> : [] }
+                              <IonLabel position="stacked">Community</IonLabel> 
+                              <IonInput type="text" placeholder="Shelter Name" value={shelter.name} disabled={disable} /> 
                             </IonItem> 
                           ) : (
-                            <IonRadioGroup name="center_id" value={shelters.id} onIonChange={updateShelter} >
+                            <IonRadioGroup name="center_id" value={user.center_id} onIonChange={updateField} >
                               <IonListHeader>
                                 <IonLabel>Community:</IonLabel>
                               </IonListHeader>
