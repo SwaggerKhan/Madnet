@@ -62,8 +62,7 @@ const UserForm = () => {
   }
 
   const updateShelter = (e) => {
-    const shelter = user.find( ele => ele.id == e.target.value)
-    setUser({ ...user, center_id: shelter.id })
+    setUser({ ...user, center_id: shelters.id })
   }
 
   const openEdit = () => {
@@ -147,7 +146,6 @@ const UserForm = () => {
       callApi({url:`/cities/${user.city_id}/centers`}).then((data)=>{
         setShelters(data)
       })
-        
     }
     fetchShelters()
 
